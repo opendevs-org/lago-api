@@ -40,7 +40,6 @@ module Events
         event.organization_id = organization.id
         event.code = event_params[:code]
         event.transaction_id = event_params[:transaction_id]
-        event.external_customer_id = event_params[:external_customer_id]
         event.external_subscription_id = event_params[:external_subscription_id]
         event.properties = event_params[:properties] || {}
         event.metadata = metadata || {}
@@ -70,7 +69,6 @@ module Events
         topic: ENV['LAGO_KAFKA_RAW_EVENTS_TOPIC'],
         payload: {
           organization_id: organization.id,
-          external_customer_id: event.external_customer_id,
           external_subscription_id: event.external_subscription_id,
           transaction_id: event.transaction_id,
           timestamp: event.timestamp.to_f,

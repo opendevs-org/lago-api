@@ -4,7 +4,6 @@ FactoryBot.define do
   factory :event do
     transient do
       subscription { create(:subscription) }
-      customer { subscription.customer }
     end
 
     organization_id { create(:organization).id }
@@ -13,7 +12,6 @@ FactoryBot.define do
     code { Faker::Name.name.underscore }
     timestamp { Time.current }
 
-    external_customer_id { customer.external_id }
     external_subscription_id { subscription.external_id }
   end
 
@@ -31,7 +29,6 @@ FactoryBot.define do
     end
 
     organization_id { source_organization.id }
-    external_customer_id { source_customer.external_id }
     external_subscription_id { source_subscription.external_id }
 
     transaction_id { SecureRandom.uuid }

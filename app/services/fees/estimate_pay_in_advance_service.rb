@@ -46,7 +46,6 @@ module Fees
       @event = Event.new(
         organization_id: organization.id,
         code: params[:code],
-        external_customer_id: customer&.external_id,
         external_subscription_id: subscriptions.first&.external_id,
         properties: params[:properties] || {},
         transaction_id: SecureRandom.uuid,
@@ -57,22 +56,14 @@ module Fees
     def customer
       return @customer if @customer
 
-      @customer = if params[:external_subscription_id]
-        organization.subscriptions.find_by(external_id: params[:external_subscription_id])&.customer
-      else
-        Customer.find_by(external_id: params[:external_customer_id], organization_id: organization.id)
-      end
+      @customer = organization.subscriptions.find_by(external_id: params[:external_subscription_id])&.customer
     end
 
     def subscriptions
       return @subscriptions if defined? @subscriptions
 
       timestamp = Time.current
-      subscriptions = if customer && params[:external_subscription_id].blank?
-        customer.subscriptions
-      else
-        organization.subscriptions.where(external_id: params[:external_subscription_id])
-      end
+      subscriptions = organization.subscriptions.where(external_id: params[:external_subscription_id])
       return unless subscriptions
 
       @subscriptions = subscriptions

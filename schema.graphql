@@ -3027,7 +3027,6 @@ type Event {
   code: String!
   customerTimezone: TimezoneEnum!
   deletedAt: ISO8601DateTime
-  externalCustomerId: String
   externalSubscriptionId: String
   id: ID!
   ipAddress: String

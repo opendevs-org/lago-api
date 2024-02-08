@@ -9,16 +9,6 @@ module Events
     end
 
     def call
-      event.external_customer_id ||= customer&.external_id
-
-      # NOTE: prevent subscription if more than 1 subscription is active
-      #       if multiple terminated matches the timestamp, takes the most recent
-      if !event.external_subscription_id && subscriptions.count(&:active?) <= 1
-        event.external_subscription_id ||= subscriptions.first&.external_id
-      end
-
-      event.save!
-
       expire_cached_charges(subscriptions)
 
       if should_handle_quantified_event?
@@ -51,21 +41,13 @@ module Events
     def customer
       return @customer if defined? @customer
 
-      @customer = if event.external_subscription_id
-        organization.subscriptions.find_by(external_id: event.external_subscription_id)&.customer
-      else
-        Customer.find_by(external_id: event.external_customer_id, organization_id: organization.id)
-      end
+      @customer = organization.subscriptions.find_by(external_id: event.external_subscription_id)&.customer
     end
 
     def subscriptions
       return @subscriptions if defined? @subscriptions
 
-      subscriptions = if customer && event.external_subscription_id.blank?
-        customer.subscriptions
-      else
-        organization.subscriptions.where(external_id: event.external_subscription_id)
-      end
+      subscriptions = organization.subscriptions.where(external_id: event.external_subscription_id)
       return unless subscriptions
 
       @subscriptions = subscriptions

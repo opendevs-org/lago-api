@@ -29,23 +29,13 @@ class Event < EventsRecord
   end
 
   def customer
-    organization
-      .customers
-      .with_discarded
-      .where(external_id: external_customer_id)
-      .where('deleted_at IS NULL OR deleted_at > ?', timestamp)
-      .order('deleted_at DESC NULLS LAST')
-      .first
+    subscription&.customer
   end
 
   def subscription
-    scope = if external_customer_id && customer
-      customer.subscriptions
-    else
-      organization.subscriptions.where(external_id: external_subscription_id)
-    end
-
-    scope
+    organization
+      .subscriptions
+      .where(external_id: external_subscription_id)
       .where("date_trunc('second', started_at::timestamp) <= ?::timestamp", timestamp)
       .where(
         "terminated_at IS NULL OR date_trunc('second', terminated_at::timestamp) >= ?",

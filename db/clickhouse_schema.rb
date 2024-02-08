@@ -3,7 +3,7 @@
 # incrementally modify your database, and then regenerate this schema definition.
 #
 # This file is the source Rails uses to define your schema when running `rails
-# clickhouse:schema:load`. When creating a new database, `rails clickhouse:schema:load` tends to
+# *****:schema:load`. When creating a new database, `rails *****:schema:load` tends to
 # be faster and is potentially less error prone than running all of your
 # migrations from scratch. Old migrations may fail to apply correctly if those
 # migrations use external dependencies or application code.
