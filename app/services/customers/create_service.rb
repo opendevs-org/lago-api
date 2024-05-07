@@ -73,6 +73,13 @@ module Customers
       handle_api_billing_configuration(customer, params, new_customer)
 
       result.customer = customer.reload
+
+      IntegrationCustomers::CreateOrUpdateService.call(
+        integration_customer_params: params[:integration_customer],
+        customer: result.customer,
+        new_customer:,
+      )
+
       track_customer_created(customer)
       result
     rescue BaseService::ServiceFailure => e
