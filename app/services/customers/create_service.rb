@@ -147,6 +147,13 @@ module Customers
       create_billing_configuration(customer, billing_configuration)
 
       result.customer = customer
+
+      IntegrationCustomers::CreateOrUpdateService.call(
+        integration_customer_params: args[:integration_customer]&.to_h,
+        customer: result.customer,
+        new_customer: true,
+      )
+
       track_customer_created(customer)
       result
     rescue ActiveRecord::RecordInvalid => e
