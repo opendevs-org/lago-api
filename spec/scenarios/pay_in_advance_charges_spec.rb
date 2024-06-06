@@ -431,7 +431,7 @@ describe 'Pay in advance charges Scenarios', :scenarios, type: :request, transac
 
           expect(subscription.reload.fees.count).to eq(1)
           event = Event.find_by(transaction_id:)
-          expect(CachedAggregation.find_by(event_id: event.id).current_aggregation).to eq(10)
+          expect(CachedAggregation.find_by(event_id: event.transaction_id).current_aggregation).to eq(10)
 
           fee = subscription.fees.first
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_06_03_095841) do
+ActiveRecord::Schema[7.0].define(version: 2024_06_06_151334) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -161,7 +161,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_03_095841) do
 
   create_table "cached_aggregations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "organization_id", null: false
-    t.uuid "event_id"
+    t.string "event_id"
     t.datetime "timestamp", null: false
     t.string "external_subscription_id", null: false
     t.uuid "charge_id", null: false
@@ -705,7 +705,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_03_095841) do
     t.boolean "skip_charges", default: false, null: false
     t.index ["customer_id", "sequential_id"], name: "index_invoices_on_customer_id_and_sequential_id", unique: true
     t.index ["customer_id"], name: "index_invoices_on_customer_id"
+    t.index ["number"], name: "index_invoices_on_number"
     t.index ["organization_id"], name: "index_invoices_on_organization_id"
+    t.index ["sequential_id"], name: "index_invoices_on_sequential_id"
     t.check_constraint "net_payment_term >= 0", name: "check_organizations_on_net_payment_term"
   end
 

@@ -2,10 +2,10 @@
 
 module Fees
   class CreatePayInAdvanceService < BaseService
-    def initialize(charge:, event:, billing_at: event.timestamp, estimate: false)
+    def initialize(charge:, event:, billing_at: nil, estimate: false)
       @charge = charge
-      @event = event
-      @billing_at = billing_at
+      @event = Events::CommonFactory.new_instance(source: event)
+      @billing_at = billing_at || @event.timestamp
       @estimate = estimate
 
       super
@@ -37,7 +37,7 @@ module Fees
     attr_reader :charge, :event, :billing_at, :estimate
 
     delegate :billable_metric, to: :charge
-    delegate :subscription, :customer, to: :event
+    delegate :subscription, to: :event
 
     def create_fee(properties:, charge_filter: nil)
       ActiveRecord::Base.transaction do
@@ -60,7 +60,7 @@ module Fees
           properties: boundaries,
           events_count: result.count,
           charge_filter_id: charge_filter&.id,
-          pay_in_advance_event_id: event.id,
+          pay_in_advance_event_id: event.transaction_id,
           payment_status: :pending,
           pay_in_advance: true,
           taxes_amount_cents: 0,

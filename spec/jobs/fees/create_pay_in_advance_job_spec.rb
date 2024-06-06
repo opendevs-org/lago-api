@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Fees::CreatePayInAdvanceJob, type: :job do
   let(:charge) { create(:standard_charge, :pay_in_advance) }
-  let(:event) { create(:event) }
+  let(:event) { Events::CommonFactory.new_instance(source: create(:event)) }
 
   let(:result) { BaseService::Result.new }
 
@@ -14,12 +14,12 @@ RSpec.describe Fees::CreatePayInAdvanceJob, type: :job do
 
   it 'delegates to the pay_in_advance aggregation service' do
     allow(Fees::CreatePayInAdvanceService).to receive(:new)
-      .with(charge:, event:, billing_at: event.timestamp)
+      .with(charge:, event: event.as_json, billing_at: nil)
       .and_return(instant_service)
     allow(instant_service).to receive(:call)
       .and_return(result)
 
-    described_class.perform_now(charge:, event:)
+    described_class.perform_now(charge:, event: event.as_json)
 
     expect(Fees::CreatePayInAdvanceService).to have_received(:new)
     expect(instant_service).to have_received(:call)

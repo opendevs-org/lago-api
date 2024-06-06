@@ -21,11 +21,13 @@ RSpec.describe Invoices::CreatePayInAdvanceChargeService, type: :service do
   let(:email_settings) { ['invoice.finalized', 'credit_note.created'] }
 
   let(:event) do
-    create(
-      :event,
-      external_subscription_id: subscription.external_id,
-      external_customer_id: customer.external_id,
-      organization_id: organization.id
+    Events::CommonFactory.new_instance(
+      source: create(
+        :event,
+        external_subscription_id: subscription.external_id,
+        external_customer_id: customer.external_id,
+        organization_id: organization.id
+      )
     )
   end
 
@@ -89,7 +91,7 @@ RSpec.describe Invoices::CreatePayInAdvanceChargeService, type: :service do
           properties: Hash,
           events_count: 1,
           charge_filter: nil,
-          pay_in_advance_event_id: event.id,
+          # pay_in_advance_event_id: event.id,
           payment_status: 'pending',
           unit_amount_cents: 1,
           precise_unit_amount: 0.01111111111
@@ -242,7 +244,7 @@ RSpec.describe Invoices::CreatePayInAdvanceChargeService, type: :service do
           properties: Hash,
           events_count: 1,
           charge_filter: nil,
-          pay_in_advance_event_id: event.id,
+          # pay_in_advance_event_id: event.id,
           payment_status: 'pending',
           unit_amount_cents: 1,
           precise_unit_amount: 0.01111111111

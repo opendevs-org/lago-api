@@ -96,20 +96,9 @@ module Events
 
     def handle_pay_in_advance
       return unless billable_metric
+      return unless charges.any?
 
-      charges.where(invoiceable: false).find_each do |charge|
-        Fees::CreatePayInAdvanceJob.perform_later(charge:, event:)
-      end
-
-      # NOTE: ensure event is processable
-      processable_event = billable_metric.count_agg? ||
-        billable_metric.custom_agg? ||
-        event.properties[billable_metric.field_name].present?
-      return unless processable_event
-
-      charges.where(invoiceable: true).find_each do |charge|
-        Invoices::CreatePayInAdvanceChargeJob.perform_later(charge:, event:, timestamp: event.timestamp)
-      end
+      Events::PayInAdvanceJob.perform_later(Events::CommonFactory.new_instance(source: event).as_json)
     end
 
     def charges
