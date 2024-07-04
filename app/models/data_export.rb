@@ -1,6 +1,7 @@
 class DataExport < ApplicationRecord
   EXPORT_FORMATS = %w[csv].freeze
   STATUSES = %w[pending processing completed failed].freeze
+  EXPIRATION_PERIOD = 7.days
 
   belongs_to :organization
   belongs_to :membership
@@ -15,6 +16,18 @@ class DataExport < ApplicationRecord
   enum status: STATUSES
 
   delegate :user, to: :membership
+
+  def processing!
+    update!(status: 'processing', started_at: Time.zone.now)
+  end
+
+  def completed!
+    update!(
+      status: 'completed',
+      completed_at: Time.zone.now,
+      expires_at: EXPIRATION_PERIOD.from_now
+    )
+  end
 
   def expired?
     return false unless expires_at
