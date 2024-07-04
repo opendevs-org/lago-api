@@ -32,6 +32,7 @@ gem 'paper_trail', '~> 15.1'
 gem 'pg'
 gem 'ransack', '~> 4.1.0'
 gem 'scenic'
+gem "strong_migrations"
 gem 'with_advisory_lock'
 
 # Currencies, Countries, Timezones...
