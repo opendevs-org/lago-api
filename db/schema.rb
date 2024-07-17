@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_12_090133) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_16_154636) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -530,13 +530,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_12_090133) do
     t.index ["group_id"], name: "index_fees_on_group_id"
     t.index ["invoice_id"], name: "index_fees_on_invoice_id"
     t.index ["invoiceable_type", "invoiceable_id"], name: "index_fees_on_invoiceable"
+    t.index ["pay_in_advance_event_transaction_id"], name: "index_fees_on_pay_in_advance_event_transaction_id", where: "(deleted_at IS NULL)"
     t.index ["subscription_id"], name: "index_fees_on_subscription_id"
     t.index ["true_up_parent_fee_id"], name: "index_fees_on_true_up_parent_fee_id"
   end
 
   create_table "fees_taxes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "fee_id", null: false
-    t.uuid "tax_id", null: false
+    t.uuid "tax_id"
     t.string "tax_description"
     t.string "tax_code", null: false
     t.string "tax_name", null: false
@@ -545,7 +546,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_12_090133) do
     t.string "amount_currency", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["fee_id", "tax_id"], name: "index_fees_taxes_on_fee_id_and_tax_id", unique: true, where: "(created_at >= '2023-09-12 00:00:00'::timestamp without time zone)"
+    t.index ["fee_id", "tax_id"], name: "index_fees_taxes_on_fee_id_and_tax_id", unique: true, where: "((tax_id IS NOT NULL) AND (created_at >= '2023-09-12 00:00:00'::timestamp without time zone))"
     t.index ["fee_id"], name: "index_fees_taxes_on_fee_id"
     t.index ["tax_id"], name: "index_fees_taxes_on_tax_id"
   end
@@ -744,7 +745,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_12_090133) do
 
   create_table "invoices_taxes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "invoice_id", null: false
-    t.uuid "tax_id", null: false
+    t.uuid "tax_id"
     t.string "tax_description"
     t.string "tax_code", null: false
     t.string "tax_name", null: false
@@ -754,7 +755,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_12_090133) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "fees_amount_cents", default: 0, null: false
-    t.index ["invoice_id", "tax_id"], name: "index_invoices_taxes_on_invoice_id_and_tax_id", unique: true, where: "(created_at >= '2023-09-12 00:00:00'::timestamp without time zone)"
+    t.index ["invoice_id", "tax_id"], name: "index_invoices_taxes_on_invoice_id_and_tax_id", unique: true, where: "((tax_id IS NOT NULL) AND (created_at >= '2023-09-12 00:00:00'::timestamp without time zone))"
     t.index ["invoice_id"], name: "index_invoices_taxes_on_invoice_id"
     t.index ["tax_id"], name: "index_invoices_taxes_on_tax_id"
   end
@@ -968,6 +969,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_12_090133) do
     t.index ["customer_id"], name: "index_subscriptions_on_customer_id"
     t.index ["external_id"], name: "index_subscriptions_on_external_id"
     t.index ["plan_id"], name: "index_subscriptions_on_plan_id"
+    t.index ["previous_subscription_id", "status"], name: "index_subscriptions_on_previous_subscription_id_and_status"
     t.index ["started_at", "ending_at"], name: "index_subscriptions_on_started_at_and_ending_at"
     t.index ["started_at"], name: "index_subscriptions_on_started_at"
     t.index ["status"], name: "index_subscriptions_on_status"

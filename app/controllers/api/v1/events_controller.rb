@@ -61,10 +61,6 @@ module Api
       end
 
       def estimate_fees
-        if create_params[:external_subscription_id].blank?
-          Deprecation.report('estimate_fees_missing_external_subscription_id', current_organization.id)
-        end
-
         result = Fees::EstimatePayInAdvanceService.call(
           organization: current_organization,
           params: create_params
@@ -91,7 +87,6 @@ module Api
           .require(:event)
           .permit(
             :transaction_id,
-            :external_customer_id,
             :code,
             :timestamp,
             :external_subscription_id,
@@ -104,7 +99,6 @@ module Api
           .permit(
             events: [
               :transaction_id,
-              :external_customer_id,
               :code,
               :timestamp,
               :external_subscription_id,

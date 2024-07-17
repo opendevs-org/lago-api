@@ -3234,6 +3234,18 @@
               "deprecationReason": null
             },
             {
+              "name": "regroupPaidFees",
+              "description": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "RegroupPaidFeesEnum",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "filters",
               "description": null,
               "type": {
@@ -6727,18 +6739,6 @@
                     "ofType": null
                   }
                 }
-              },
-              "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "group",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "JSON",
-                "ofType": null
               },
               "defaultValue": null,
               "isDeprecated": false,
@@ -15196,20 +15196,6 @@
               ]
             },
             {
-              "name": "group",
-              "description": null,
-              "type": {
-                "kind": "OBJECT",
-                "name": "Group",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "args": [
-
-              ]
-            },
-            {
               "name": "groupedBy",
               "description": null,
               "type": {
@@ -17564,83 +17550,6 @@
         },
         {
           "kind": "OBJECT",
-          "name": "Group",
-          "description": null,
-          "interfaces": [
-
-          ],
-          "possibleTypes": null,
-          "fields": [
-            {
-              "name": "deletedAt",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "ISO8601DateTime",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "args": [
-
-              ]
-            },
-            {
-              "name": "id",
-              "description": null,
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "args": [
-
-              ]
-            },
-            {
-              "name": "key",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "args": [
-
-              ]
-            },
-            {
-              "name": "value",
-              "description": null,
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "args": [
-
-              ]
-            }
-          ],
-          "inputFields": null,
-          "enumValues": null
-        },
-        {
-          "kind": "OBJECT",
           "name": "GroupedChargeUsage",
           "description": null,
           "interfaces": [
@@ -19489,20 +19398,6 @@
                   "name": "CurrencyEnum",
                   "ofType": null
                 }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "args": [
-
-              ]
-            },
-            {
-              "name": "group",
-              "description": null,
-              "type": {
-                "kind": "OBJECT",
-                "name": "Group",
-                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -24782,24 +24677,6 @@
                 "ofType": {
                   "kind": "SCALAR",
                   "name": "Int",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "args": [
-
-              ]
-            },
-            {
-              "name": "vatRate",
-              "description": null,
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Float",
                   "ofType": null
                 }
               },
@@ -33859,18 +33736,6 @@
                     "ofType": null
                   }
                 }
-              },
-              "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "group",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "JSON",
-                "ofType": null
               },
               "defaultValue": null,
               "isDeprecated": false,
